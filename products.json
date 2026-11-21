@@ -1,0 +1,26 @@
+[
+  {
+    "id": "study",
+    "name": "学习资料合集",
+    "category": "学习资料",
+    "description": "精选学习资料合集",
+    "price": 9.9,
+    "icon": "📚"
+  },
+  {
+    "id": "design",
+    "name": "设计素材合集",
+    "category": "设计素材",
+    "description": "实用设计素材合集",
+    "price": 19.9,
+    "icon": "🎨"
+  },
+  {
+    "id": "practical",
+    "name": "实用资源合集",
+    "category": "实用工具",
+    "description": "精选实用资源合集",
+    "price": 6.9,
+    "icon": "🧰"
+  }
+]
