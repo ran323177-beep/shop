@@ -1,93 +1,249 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的资源商城</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青衿资源库</title>
 
-        header {
-            background: #1677ff;
-            color: white;
-            padding: 25px 15px;
-            text-align: center;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        main {
-            max-width: 700px;
-            margin: 25px auto;
-            padding: 15px;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #263445;
+}
 
-        .product {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px #ddd;
-        }
+header {
+    background: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px #e5eaf2;
+}
 
-        .price {
-            color: #f56c6c;
-            font-size: 22px;
-            font-weight: bold;
-        }
+.logo {
+    color: #2878e8;
+    font-size: 23px;
+    font-weight: bold;
+}
 
-        button {
-            background: #1677ff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 16px;
-            width: 100%;
-        }
+nav a {
+    text-decoration: none;
+    color: #555;
+    margin-left: 12px;
+    font-size: 14px;
+}
 
-        footer {
-            text-align: center;
-            color: #888;
-            padding: 20px;
-        }
-    </style>
+.banner {
+    background: linear-gradient(120deg,#2878e8,#65a6ff);
+    color: white;
+    text-align: center;
+    padding: 45px 15px;
+}
+
+.banner h1 {
+    font-size: 30px;
+}
+
+.search {
+    max-width: 500px;
+    margin: 25px auto 0;
+    display: flex;
+}
+
+.search input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 15px;
+}
+
+.search button {
+    background: #155fc2;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 0 8px 8px 0;
+}
+
+main {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+.categories {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.categories button {
+    background: white;
+    border: 1px solid #e0e7f1;
+    padding: 10px 18px;
+    border-radius: 20px;
+    color: #397bd5;
+}
+
+h2 {
+    font-size: 21px;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 18px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #e8edf5;
+}
+
+.icon {
+    font-size: 38px;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.price {
+    color: #ed654e;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.card button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #2878e8;
+    color: white;
+    border-radius: 7px;
+}
+
+footer {
+    background: white;
+    text-align: center;
+    padding: 25px;
+    color: #888;
+    margin-top: 40px;
+}
+
+</style>
 </head>
+
 <body>
 
 <header>
-    <h1>我的资源商城</h1>
-    <p>精选数字资源，方便快捷</p>
+    <div class="logo">青衿资源库</div>
+    <nav>
+        <a href="#">首页</a>
+        <a href="#products">资源商城</a>
+    </nav>
 </header>
+
+<section class="banner">
+    <h1>青衿资源库</h1>
+    <p>精选优质数字资源，探索更多可能</p>
+
+    <div class="search">
+        <input id="searchInput"
+        placeholder="搜索你想要的资源...">
+        <button onclick="searchProducts()">搜索</button>
+    </div>
+</section>
 
 <main>
 
-    <div class="product">
-        <h2>Python学习资料</h2>
-        <p>适合初学者的Python学习资源。</p>
-        <p class="price">¥9.90</p>
-        <button onclick="alert('商品详情页面正在建设中')">
-            查看详情
-        </button>
+    <div class="categories">
+        <button onclick="filterProducts('全部')">全部资源</button>
+        <button onclick="filterProducts('学习资料')">学习资料</button>
+        <button onclick="filterProducts('设计素材')">设计素材</button>
+        <button onclick="filterProducts('其他')">其他资源</button>
     </div>
 
-    <div class="product">
-        <h2>设计素材合集</h2>
-        <p>个人设计作品与素材合集。</p>
-        <p class="price">¥19.90</p>
-        <button onclick="alert('商品详情页面正在建设中')">
-            查看详情
-        </button>
+    <h2 id="products">热门资源</h2>
+
+    <div class="products" id="productList">
+
+        <div class="card" data-category="学习资料">
+            <div class="icon">📚</div>
+            <h3>学习资料合集</h3>
+            <p>精选学习资料与个人原创内容。</p>
+            <div class="price">¥9.90</div>
+            <button onclick="showDetails('学习资料合集')">
+                查看详情
+            </button>
+        </div>
+
+        <div class="card" data-category="设计素材">
+            <div class="icon">🎨</div>
+            <h3>设计素材合集</h3>
+            <p>个人原创设计作品与素材。</p>
+            <div class="price">¥19.90</div>
+            <button onclick="showDetails('设计素材合集')">
+                查看详情
+            </button>
+        </div>
+
+        <div class="card" data-category="其他">
+            <div class="icon">💻</div>
+            <h3>实用资源合集</h3>
+            <p>更多实用数字资源。</p>
+            <div class="price">¥6.90</div>
+            <button onclick="showDetails('实用资源合集')">
+                查看详情
+            </button>
+        </div>
+
     </div>
 
 </main>
 
 <footer>
-    <p>© 2026 我的资源商城</p>
+    <p>青衿资源库 © 2026</p>
+    <p>分享优质资源，传递知识价值</p>
 </footer>
+
+<script>
+function showDetails(name) {
+    alert("你选择了：" + name + "。商品详情正在建设中。");
+}
+
+function filterProducts(category) {
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display =
+            category === "全部" ||
+            card.dataset.category === category
+            ? "block" : "none";
+    });
+}
+
+function searchProducts() {
+    let keyword =
+        document.getElementById("searchInput").value
+        .toLowerCase();
+
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display =
+            card.innerText.toLowerCase().includes(keyword)
+            ? "block" : "none";
+    });
+}
+</script>
 
 </body>
 </html>
