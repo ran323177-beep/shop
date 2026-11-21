@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商品详情 - 青衿资源库</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+    background: #f5f7fb;
+    color: #263445;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px #00000008;
+}
+
+.header-inner {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.logo {
+    color: #2878df;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 20px;
+}
+
+.back {
+    color: #2878df;
+    text-decoration: none;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 35px;
+    margin-top: 22px;
+    box-shadow: 0 5px 25px #00000008;
+}
+
+.picture {
+    height: 210px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #dcecff, #eff5ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+}
+
+h1 {
+    margin-top: 25px;
+}
+
+.description {
+    color: #697789;
+    line-height: 1.9;
+}
+
+.price {
+    color: #2878df;
+    font-size: 27px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.notice {
+    background: #f0f6ff;
+    padding: 15px;
+    border-radius: 10px;
+    color: #55718f;
+    line-height: 1.8;
+}
+
+button {
+    border: none;
+    background: #2878df;
+    color: white;
+    padding: 13px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">青衿资源库</div>
+    </div>
+</header>
+
+<main>
+    <a class="back" href="index.html">← 返回商城首页</a>
+
+    <div class="card">
+        <div class="picture" id="picture">📚</div>
+
+        <h1 id="name">商品名称</h1>
+
+        <p class="description" id="description">
+            商品介绍正在加载……
+        </p>
+
+        <div class="price" id="price">¥0.00</div>
+
+        <div class="notice">
+            温馨提示：本页面目前为展示演示版本，不提供真实支付和自动发货。
+            请确认资源版权及使用授权后再进行分享或使用。
+        </div>
+
+        <button onclick="alert('购买功能还在建设中，目前不能进行真实付款。')">
+            购买功能（演示）
+        </button>
+    </div>
+</main>
+
+<footer>
+    © 2026 青衿资源库
+</footer>
+
+<script>
+const products = {
+    study: {
+        name: "学习资料合集",
+        price: "¥9.90",
+        picture: "📚",
+        description: "精选学习资料展示页面，适合用于学习和整理。具体内容、格式及使用说明请以实际商品介绍为准。"
+    },
+
+    design: {
+        name: "设计素材合集",
+        price: "¥12.90",
+        picture: "🎨",
+        description: "设计素材展示页面，可用于展示拥有合法使用授权的图片、模板及设计资源。"
+    },
+
+    practical: {
+        name: "实用资源合集",
+        price: "¥6.90",
+        picture: "🗂️",
+        description: "实用工具和资源展示页面，具体资源内容和使用条件以商品说明为准。"
+    }
+};
+
+const id = new URLSearchParams(location.search).get("id");
+const product = products[id];
+
+if (product) {
+    document.getElementById("name").textContent = product.name;
+    document.getElementById("price").textContent = product.price;
+    document.getElementById("picture").textContent = product.picture;
+    document.getElementById("description").textContent = product.description;
+} else {
+    document.getElementById("name").textContent = "暂未找到该商品";
+    document.getElementById("description").textContent = "请返回商城首页重新选择商品。";
+    document.getElementById("price").textContent = "";
+    document.getElementById("picture").textContent = "🔍";
+}
+</script>
+
+</body>
+</html>
