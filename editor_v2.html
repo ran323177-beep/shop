@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青衿资源库 - 商品编辑工具</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:25px 15px;background:#f2f7fc;font-family:Arial,sans-serif;color:#24364b}.container{max-width:760px;margin:auto}h1{color:#2675bd}.panel{background:white;padding:22px;border-radius:14px;margin:18px 0;box-shadow:0 3px 12px #dce8f3}input,textarea,select{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #ccd9e6;border-radius:8px;font-size:15px}button{border:0;padding:11px 17px;border-radius:8px;background:#287fc5;color:white;cursor:pointer;margin:4px}.delete{background:#dc6262}.secondary{background:#71869a}.warning{background:#b77b28}.product{border:1px solid #e0e9f2;padding:13px;border-radius:9px;margin:10px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f5f9;padding:15px;border-radius:8px;overflow-x:auto}.notice{color:#687c90;font-size:14px;line-height:1.7}.status{color:#237647;font-size:14px;min-height:20px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>青衿资源库 · 商品编辑工具</h1>
+<p class="notice">编辑商品后会自动保存在当前浏览器中。生成的代码仍需手动复制到 GitHub 首页。</p>
+
+<div class="panel">
+<h2>添加 / 编辑商品</h2>
+<label for="name">商品名称</label><input id="name" placeholder="例如：学习资料合集">
+<label for="id">商品编号</label><input id="id" placeholder="例如：study">
+<label for="category">商品分类</label>
+<select id="category"><option value="学习资料">学习资料</option><option value="设计素材">设计素材</option><option value="其他">其他</option></select>
+<label for="description">商品介绍</label><textarea id="description" rows="3" placeholder="填写商品介绍"></textarea>
+<label for="price">商品价格（元）</label><input id="price" type="number" min="0" step="0.01" placeholder="9.90">
+<button type="button" onclick="saveProduct()">保存商品</button>
+<button type="button" class="secondary" onclick="clearForm()">清空表单</button>
+<p id="status" class="status" aria-live="polite"></p>
+</div>
+
+<div class="panel"><h2>商品列表</h2><div id="productList"></div></div>
+
+<div class="panel">
+<h2>生成商品配置代码</h2>
+<p class="notice">生成后复制代码，手动替换首页 index.html 中原来的 products 数组。</p>
+<button type="button" onclick="generateCode()">生成代码</button>
+<button type="button" onclick="copyCode()">复制代码</button>
+<pre id="output">点击“生成代码”后，代码会显示在这里。</pre>
+</div>
+
+<div class="panel">
+<h2>数据管理</h2>
+<p class="notice">数据保存在当前浏览器的本地存储中。换浏览器、换设备或清除浏览器数据后，不会自动同步。</p>
+<button type="button" class="warning" onclick="restoreDefaults()">恢复初始商品</button>
+</div>
+</div>
+
+<script>
+const defaultProducts = [
+{id:"study",name:"学习资料合集",category:"学习资料",description:"精选学习资料与个人原创内容。",price:"9.90",icon:"📚"},
+{id:"design",name:"设计素材合集",category:"设计素材",description:"个人原创设计作品与素材。",price:"19.90",icon:"🎨"},
+{id:"practical",name:"实用资源合集",category:"其他",description:"更多实用数字资源。",price:"6.90",icon:"💻"}
+];
+const STORAGE_KEY = "qingjin_shop_products_v1";
+let products = loadProducts();
+let editingIndex = -1;
+
+function loadProducts(){
+  try{
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved){const parsed=JSON.parse(saved);if(Array.isArray(parsed))return parsed;}
+  }catch(error){console.warn("读取本地商品数据失败：",error);}
+  return JSON.parse(JSON.stringify(defaultProducts));
+}
+function persistProducts(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(products));
+    document.getElementById("status").textContent="已自动保存到当前浏览器。";
+  }catch(error){
+    document.getElementById("status").textContent="保存失败：浏览器可能禁用了本地存储。请先生成并复制代码备份。";
+  }
+}
+function renderProducts(){
+  const list=document.getElementById("productList");
+  list.replaceChildren();
+  if(products.length===0){const empty=document.createElement("p");empty.textContent="目前没有商品。";list.appendChild(empty);return;}
+  products.forEach((p,index)=>{
+    const box=document.createElement("div");box.className="product";
+    const title=document.createElement("strong");title.textContent=p.name+"（¥"+p.price+"）";
+    const info=document.createElement("p");info.textContent="编号："+p.id+" | 分类："+p.category;
+    const edit=document.createElement("button");edit.textContent="编辑";edit.onclick=()=>editProduct(index);
+    const del=document.createElement("button");del.textContent="删除";del.className="delete";del.onclick=()=>deleteProduct(index);
+    box.append(title,info,edit,del);list.appendChild(box);
+  });
+}
+function saveProduct(){
+  const name=document.getElementById("name").value.trim();
+  const id=document.getElementById("id").value.trim();
+  const category=document.getElementById("category").value;
+  const description=document.getElementById("description").value.trim();
+  const price=document.getElementById("price").value;
+  if(!name||!id||!description||price===""){alert("请填写完整商品信息！");return;}
+  if(!/^[a-zA-Z0-9_-]+$/.test(id)){alert("商品编号只能使用英文字母、数字、下划线和短横线！");return;}
+  if(!Number.isFinite(Number(price))||Number(price)<0){alert("请输入有效价格！");return;}
+  if(products.some((p,i)=>p.id===id&&i!==editingIndex)){alert("这个商品编号已经存在，请换一个！");return;}
+  const icons={"学习资料":"📚","设计素材":"🎨","其他":"💻"};
+  const product={id,name,category,description,price:Number(price).toFixed(2),icon:icons[category]};
+  if(editingIndex>=0)products[editingIndex]=product;else products.push(product);
+  persistProducts();clearForm();renderProducts();
+}
+function editProduct(index){
+  const p=products[index];
+  document.getElementById("name").value=p.name;
+  document.getElementById("id").value=p.id;
+  document.getElementById("category").value=p.category;
+  document.getElementById("description").value=p.description;
+  document.getElementById("price").value=p.price;
+  editingIndex=index;
+  document.getElementById("status").textContent="正在编辑："+p.name;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function deleteProduct(index){
+  if(confirm("确定删除这个商品吗？")){products.splice(index,1);persistProducts();renderProducts();clearForm();}
+}
+function clearForm(){
+  document.getElementById("name").value="";
+  document.getElementById("id").value="";
+  document.getElementById("description").value="";
+  document.getElementById("price").value="";
+  document.getElementById("category").value="学习资料";
+  editingIndex=-1;
+}
+function generateCode(){
+  document.getElementById("output").textContent="const products = "+JSON.stringify(products,null,2)+";";
+}
+async function copyCode(){
+  generateCode();
+  const code=document.getElementById("output").textContent;
+  try{await navigator.clipboard.writeText(code);alert("代码已复制！");}
+  catch(error){alert("自动复制失败，请长按代码区域手动复制。");}
+}
+function restoreDefaults(){
+  if(confirm("确定恢复初始商品吗？当前浏览器保存的商品修改将被覆盖。")){
+    products=JSON.parse(JSON.stringify(defaultProducts));
+    persistProducts();renderProducts();clearForm();
+    document.getElementById("output").textContent="点击“生成代码”后，代码会显示在这里。";
+  }
+}
+renderProducts();
+</script>
+</body>
+</html>
