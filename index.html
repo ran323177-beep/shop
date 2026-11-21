@@ -6,13 +6,11 @@
 <title>青衿资源库</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
     background: #f5f7fb;
     color: #263445;
 }
@@ -46,12 +44,10 @@ nav a {
     padding: 45px 15px;
 }
 
-.banner h1 {
-    font-size: 30px;
-}
+.banner h1 { font-size: 30px; }
 
 .search {
-    max-width: 500px;
+    max-width: 550px;
     margin: 25px auto 0;
     display: flex;
 }
@@ -71,6 +67,7 @@ nav a {
     border: none;
     padding: 12px 20px;
     border-radius: 0 8px 8px 0;
+    cursor: pointer;
 }
 
 main {
@@ -92,11 +89,15 @@ main {
     padding: 10px 18px;
     border-radius: 20px;
     color: #397bd5;
+    cursor: pointer;
 }
 
-h2 {
-    font-size: 21px;
+.categories button.active {
+    background: #2878e8;
+    color: white;
 }
+
+h2 { font-size: 21px; }
 
 .products {
     display: grid;
@@ -111,18 +112,20 @@ h2 {
     box-shadow: 0 3px 12px #e8edf5;
 }
 
-.icon {
-    font-size: 38px;
-}
+.icon { font-size: 38px; }
 
-.card h3 {
-    margin-bottom: 8px;
+.card h3 { margin-bottom: 8px; }
+
+.card p {
+    color: #68788d;
+    line-height: 1.6;
 }
 
 .price {
     color: #ed654e;
     font-size: 22px;
     font-weight: bold;
+    margin: 15px 0;
 }
 
 .card button {
@@ -132,6 +135,19 @@ h2 {
     background: #2878e8;
     color: white;
     border-radius: 7px;
+    cursor: pointer;
+}
+
+.card button:hover {
+    background: #155fc2;
+}
+
+#emptyMessage {
+    display: none;
+    text-align: center;
+    color: #8996a8;
+    padding: 35px 10px;
+    grid-column: 1 / -1;
 }
 
 footer {
@@ -142,16 +158,21 @@ footer {
     margin-top: 40px;
 }
 
+@media(max-width:600px) {
+    header { flex-wrap: wrap; gap: 12px; }
+    nav a { margin-left: 8px; }
+}
 </style>
 </head>
 
 <body>
 
 <header>
-    <div class="logo">青衿资源库</div>
+    <div class="logo">📘 青衿资源库</div>
     <nav>
-        <a href="#">首页</a>
+        <a href="index.html">首页</a>
         <a href="#products">资源商城</a>
+        <a href="help.html">帮助中心</a>
     </nav>
 </header>
 
@@ -161,54 +182,28 @@ footer {
 
     <div class="search">
         <input id="searchInput"
-        placeholder="搜索你想要的资源...">
+        placeholder="搜索商品名称、介绍或分类..."
+        oninput="searchProducts()">
+
         <button onclick="searchProducts()">搜索</button>
     </div>
 </section>
 
 <main>
 
-    <div class="categories">
-        <button onclick="filterProducts('全部')">全部资源</button>
-        <button onclick="filterProducts('学习资料')">学习资料</button>
-        <button onclick="filterProducts('设计素材')">设计素材</button>
-        <button onclick="filterProducts('其他')">其他资源</button>
+    <div class="categories" id="categories">
+        <button class="active" onclick="filterProducts('全部',this)">全部资源</button>
+        <button onclick="filterProducts('学习资料',this)">学习资料</button>
+        <button onclick="filterProducts('设计素材',this)">设计素材</button>
+        <button onclick="filterProducts('其他',this)">其他资源</button>
     </div>
 
     <h2 id="products">热门资源</h2>
 
-    <div class="products" id="productList">
+    <div class="products" id="productList"></div>
 
-        <div class="card" data-category="学习资料">
-            <div class="icon">📚</div>
-            <h3>学习资料合集</h3>
-            <p>精选学习资料与个人原创内容。</p>
-            <div class="price">¥9.90</div>
-            <button onclick="location.href='detail.html?id=study'">
-                查看详情
-            </button>
-        </div>
-
-        <div class="card" data-category="设计素材">
-            <div class="icon">🎨</div>
-            <h3>设计素材合集</h3>
-            <p>个人原创设计作品与素材。</p>
-            <div class="price">¥19.90</div>
-            <button onclick="location.href='detail.html?id=design'">
-                查看详情
-            </button>
-        </div>
-
-        <div class="card" data-category="其他">
-            <div class="icon">💻</div>
-            <h3>实用资源合集</h3>
-            <p>更多实用数字资源。</p>
-            <div class="price">¥6.90</div>
-            <button onclick="location.href='detail.html?id=practical'">
-                查看详情
-            </button>
-        </div>
-
+    <div id="emptyMessage">
+        没有找到相关商品，试试其他关键词吧。
     </div>
 
 </main>
@@ -220,26 +215,117 @@ footer {
 
 <script>
 
-function filterProducts(category) {
-    document.querySelectorAll(".card").forEach(card => {
-        card.style.display =
-            category === "全部" ||
-            card.dataset.category === category
-            ? "block" : "none";
+// ==============================
+// 商品管理区：修改商品信息主要看这里
+// ==============================
+
+const products = [
+    {
+        id: "study",
+        name: "学习资料合集",
+        category: "学习资料",
+        description: "精选学习资料与个人原创内容。",
+        price: "9.90",
+        icon: "📚"
+    },
+    {
+        id: "design",
+        name: "设计素材合集",
+        category: "设计素材",
+        description: "个人原创设计作品与素材。",
+        price: "19.90",
+        icon: "🎨"
+    },
+    {
+        id: "practical",
+        name: "实用资源合集",
+        category: "其他",
+        description: "更多实用数字资源。",
+        price: "6.90",
+        icon: "💻"
+    }
+];
+
+// 当前选择的分类
+let currentCategory = "全部";
+
+// 显示商品
+function renderProducts() {
+    const list = document.getElementById("productList");
+    const keyword = document.getElementById("searchInput").value
+        .trim().toLowerCase();
+
+    list.innerHTML = "";
+
+    const filtered = products.filter(product => {
+        const matchCategory =
+            currentCategory === "全部" ||
+            product.category === currentCategory;
+
+        const text = (
+            product.name + " " +
+            product.category + " " +
+            product.description
+        ).toLowerCase();
+
+        const matchKeyword = text.includes(keyword);
+
+        return matchCategory && matchKeyword;
     });
+
+    filtered.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const icon = document.createElement("div");
+        icon.className = "icon";
+        icon.textContent = product.icon;
+
+        const name = document.createElement("h3");
+        name.textContent = product.name;
+
+        const description = document.createElement("p");
+        description.textContent = product.description;
+
+        const price = document.createElement("div");
+        price.className = "price";
+        price.textContent = "¥" + product.price;
+
+        const button = document.createElement("button");
+        button.textContent = "查看详情";
+        button.addEventListener("click", () => {
+            location.href = "detail.html?id=" +
+                encodeURIComponent(product.id);
+        });
+
+        card.append(icon, name, description, price, button);
+        list.appendChild(card);
+    });
+
+    document.getElementById("emptyMessage").style.display =
+        filtered.length === 0 ? "block" : "none";
 }
 
+// 搜索商品
 function searchProducts() {
-    let keyword =
-        document.getElementById("searchInput").value
-        .toLowerCase();
-
-    document.querySelectorAll(".card").forEach(card => {
-        card.style.display =
-            card.innerText.toLowerCase().includes(keyword)
-            ? "block" : "none";
-    });
+    renderProducts();
 }
+
+// 分类筛选
+function filterProducts(category, button) {
+    currentCategory = category;
+
+    document.querySelectorAll(".categories button")
+        .forEach(item => item.classList.remove("active"));
+
+    button.classList.add("active");
+
+    renderProducts();
+}
+
+// 首次加载商品
+renderProducts();
+
 </script>
 
 </body>
