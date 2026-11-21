@@ -184,7 +184,7 @@ footer {
             <h3>学习资料合集</h3>
             <p>精选学习资料与个人原创内容。</p>
             <div class="price">¥9.90</div>
-            <button onclick="showDetails('学习资料合集')">
+            <button onclick="location.href='detail.html?id=study'">
                 查看详情
             </button>
         </div>
@@ -194,7 +194,7 @@ footer {
             <h3>设计素材合集</h3>
             <p>个人原创设计作品与素材。</p>
             <div class="price">¥19.90</div>
-            <button onclick="showDetails('设计素材合集')">
+            <button onclick="location.href='detail.html?id=design'">
                 查看详情
             </button>
         </div>
@@ -204,7 +204,7 @@ footer {
             <h3>实用资源合集</h3>
             <p>更多实用数字资源。</p>
             <div class="price">¥6.90</div>
-            <button onclick="showDetails('实用资源合集')">
+            <button onclick="location.href='detail.html?id=practical'">
                 查看详情
             </button>
         </div>
@@ -219,9 +219,6 @@ footer {
 </footer>
 
 <script>
-function showDetails(name) {
-    alert("你选择了：" + name + "。商品详情正在建设中。");
-}
 
 function filterProducts(category) {
     document.querySelectorAll(".card").forEach(card => {
