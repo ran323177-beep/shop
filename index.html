@@ -212,42 +212,29 @@ footer {
     <p>青衿资源库 © 2026</p>
     <p>分享优质资源，传递知识价值</p>
 </footer>
-
 <script>
-
-// ==============================
-// 商品管理区：修改商品信息主要看这里
-// ==============================
-
-const products = [
-    {
-        id: "study",
-        name: "学习资料合集",
-        category: "学习资料",
-        description: "精选学习资料与个人原创内容。",
-        price: "9.90",
-        icon: "📚"
-    },
-    {
-        id: "design",
-        name: "设计素材合集",
-        category: "设计素材",
-        description: "个人原创设计作品与素材。",
-        price: "19.90",
-        icon: "🎨"
-    },
-    {
-        id: "practical",
-        name: "实用资源合集",
-        category: "其他",
-        description: "更多实用数字资源。",
-        price: "6.90",
-        icon: "💻"
-    }
-];
-
-// 当前选择的分类
+let products = [];
 let currentCategory = "全部";
+
+// 从 products.json 读取商品
+async function loadProducts() {
+    const list = document.getElementById("productList");
+
+    try {
+        const response = await fetch("./products.json");
+
+        if (!response.ok) {
+            throw new Error("商品数据读取失败");
+        }
+
+        products = await response.json();
+        renderProducts();
+
+    } catch (error) {
+        list.innerHTML = "商品加载失败，请稍后刷新页面。";
+        console.error(error);
+    }
+}
 
 // 显示商品
 function renderProducts() {
@@ -268,9 +255,7 @@ function renderProducts() {
             product.description
         ).toLowerCase();
 
-        const matchKeyword = text.includes(keyword);
-
-        return matchCategory && matchKeyword;
+        return matchCategory && text.includes(keyword);
     });
 
     filtered.forEach(product => {
@@ -279,7 +264,7 @@ function renderProducts() {
 
         const icon = document.createElement("div");
         icon.className = "icon";
-        icon.textContent = product.icon;
+        icon.textContent = product.icon || "📦";
 
         const name = document.createElement("h3");
         name.textContent = product.name;
@@ -289,10 +274,12 @@ function renderProducts() {
 
         const price = document.createElement("div");
         price.className = "price";
-        price.textContent = "¥" + product.price;
+        price.textContent =
+            "¥" + Number(product.price).toFixed(2);
 
         const button = document.createElement("button");
         button.textContent = "查看详情";
+
         button.addEventListener("click", () => {
             location.href = "detail.html?id=" +
                 encodeURIComponent(product.id);
@@ -306,7 +293,7 @@ function renderProducts() {
         filtered.length === 0 ? "block" : "none";
 }
 
-// 搜索商品
+// 搜索
 function searchProducts() {
     renderProducts();
 }
@@ -323,10 +310,10 @@ function filterProducts(category, button) {
     renderProducts();
 }
 
-// 首次加载商品
-renderProducts();
-
+// 加载商品
+loadProducts();
 </script>
+
 
 </body>
 </html>
