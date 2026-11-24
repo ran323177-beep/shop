@@ -389,17 +389,27 @@ loadProducts();
 async function loadNotice() {
     try {
         const response = await fetch("./site-config.json?v=" + Date.now());
+
         if (!response.ok) throw new Error("公告读取失败");
 
         const config = await response.json();
 
+        // 更新首页顶部公告栏
+        document.getElementById("barTitle").textContent =
+            config.barTitle || "📢 网站公告";
+
+        document.getElementById("barContent").textContent =
+            config.barContent || "欢迎来到青衿资源库！";
+
+        // 更新弹窗公告
         document.getElementById("noticeTitle").textContent =
             config.noticeTitle || "📢 网站公告";
 
         document.getElementById("noticeContent").textContent =
             config.noticeContent || "欢迎来到青衿资源库！";
+
     } catch (error) {
-        console.log("使用默认公告内容");
+        console.log("公告读取失败，使用默认内容");
     }
 }
 
