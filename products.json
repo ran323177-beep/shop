@@ -1,5 +1,13 @@
 [
   {
+    "id": "study",
+    "name": "学习资料合集",
+    "category": "学习资料",
+    "description": "精选学习资料与个人原创内容。",
+    "price": "9.90",
+    "icon": "📚"
+  },
+  {
     "id": "design",
     "name": "设计素材合集",
     "category": "设计素材",
