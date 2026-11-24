@@ -25,7 +25,33 @@
 <button type="button" class="secondary" onclick="clearForm()">清空表单</button>
 <p id="status" class="status" aria-live="polite"></p>
 </div>
+<div class="panel">
+    <h2>📢 公告管理</h2>
 
+    <h3>首页顶部公告栏</h3>
+    <label>公告标题</label>
+    <input id="barTitle" value="📢 网站公告">
+
+    <label>公告内容</label>
+    <textarea id="barContent" rows="3"
+        placeholder="填写首页顶部公告内容"></textarea>
+
+    <hr>
+
+    <h3>弹窗公告</h3>
+    <label>弹窗标题</label>
+    <input id="popupTitle" value="📢 网站公告">
+
+    <label>弹窗内容</label>
+    <textarea id="popupContent" rows="3"
+        placeholder="填写弹窗公告内容"></textarea>
+
+    <button type="button" onclick="saveNotice()">
+        保存公告
+    </button>
+
+    <p id="noticeStatus" class="status"></p>
+</div>
 <div class="panel"><h2>商品列表</h2><div id="productList"></div></div>
 
 <div class="panel">
