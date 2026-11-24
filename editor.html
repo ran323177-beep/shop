@@ -296,6 +296,82 @@ async function restoreDefaults(){
     alert("连接服务器失败，请检查网络；商品列表未恢复。");
   }
 }
+async function loadNoticeConfig() {
+  try {
+    const response = await fetch("./site-config.json?v=" + Date.now());
+    if (!response.ok) throw new Error("读取失败");
+
+    const config = await response.json();
+
+    document.getElementById("barTitle").value =
+      config.barTitle || "📢 网站公告";
+
+    document.getElementById("barContent").value =
+      config.barContent || "欢迎来到青衿资源库！";
+
+    document.getElementById("popupTitle").value =
+      config.noticeTitle || "📢 网站公告";
+
+    document.getElementById("popupContent").value =
+      config.noticeContent || "欢迎来到青衿资源库！";
+  } catch (error) {
+    document.getElementById("noticeStatus").textContent =
+      "公告配置读取失败，请检查网站配置文件。";
+  }
+}
+
+async function saveNotice() {
+  const config = {
+    barTitle: document.getElementById("barTitle").value.trim(),
+    barContent: document.getElementById("barContent").value.trim(),
+    noticeTitle: document.getElementById("popupTitle").value.trim(),
+    noticeContent: document.getElementById("popupContent").value.trim()
+  };
+
+  if (!config.barTitle || !config.barContent ||
+      !config.noticeTitle || !config.noticeContent) {
+    alert("请填写完整的公告内容！");
+    return;
+  }
+
+  const password = prompt("请输入管理员密码：");
+
+  if (password === null || password === "") {
+    return;
+  }
+
+  const status = document.getElementById("noticeStatus");
+  status.textContent = "正在保存……";
+
+  try {
+    const response = await fetch(
+      "https://qingjin-shop-api.ran323177.workers.dev/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          password: password,
+          config: config
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      status.textContent = "公告已成功同步到 GitHub！";
+      alert("公告保存成功！");
+    } else {
+      status.textContent = "保存失败：" + (result.error || "未知错误");
+    }
+  } catch (error) {
+    status.textContent = "连接服务器失败，请检查网络。";
+  }
+}
+
+loadNoticeConfig();
 renderProducts();
 </script>
 </body>
