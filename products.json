@@ -3,24 +3,32 @@
     "id": "study",
     "name": "学习资料合集",
     "category": "学习资料",
-    "description": "精选学习资料合集",
-    "price": 9.9,
+    "description": "精选学习资料与个人原创内容。",
+    "price": "9.90",
     "icon": "📚"
   },
   {
     "id": "design",
     "name": "设计素材合集",
     "category": "设计素材",
-    "description": "实用设计素材合集",
-    "price": 19.9,
+    "description": "个人原创设计作品与素材。",
+    "price": "19.90",
     "icon": "🎨"
   },
   {
     "id": "practical",
     "name": "实用资源合集",
-    "category": "实用工具",
-    "description": "精选实用资源合集",
-    "price": 6.9,
-    "icon": "🧰"
+    "category": "其他",
+    "description": "更多实用数字资源。",
+    "price": "6.90",
+    "icon": "💻"
+  },
+  {
+    "id": "001",
+    "name": "测试",
+    "category": "学习资料",
+    "description": "测试",
+    "price": "1.00",
+    "icon": "📚"
   }
 ]
