@@ -3,7 +3,7 @@
     "id": "study",
     "name": "学习资料合集",
     "category": "学习资料",
-    "description": "精选学习资料与个人原创内容。",
+    "description": "精选学习资料与个人原创内容",
     "price": "9.90",
     "icon": "📚"
   },
@@ -22,13 +22,5 @@
     "description": "更多实用数字资源。",
     "price": "6.90",
     "icon": "💻"
-  },
-  {
-    "id": "001",
-    "name": "测试",
-    "category": "学习资料",
-    "description": "测试",
-    "price": "1.00",
-    "icon": "📚"
   }
 ]
