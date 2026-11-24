@@ -335,8 +335,8 @@ loadProducts();
 </script>
 <div id="noticePopup" class="notice-mask">
     <div class="notice-box">
-        <div class="notice-title">📢 网站公告</div>
-        <p>欢迎来到青衿资源库！本站持续整理和更新优质学习资料与实用资源。</p>
+        <div class="notice-title" id="noticeTitle">📢 网站公告</div>
+        <p id="noticeContent">欢迎来到青衿资源库！本站持续整理和更新优质学习资料与实用资源。</p>
         <button onclick="closeNotice()">我知道了</button>
     </div>
 </div>
@@ -386,9 +386,28 @@ loadProducts();
 </style>
 
 <script>
+async function loadNotice() {
+    try {
+        const response = await fetch("./site-config.json?v=" + Date.now());
+        if (!response.ok) throw new Error("公告读取失败");
+
+        const config = await response.json();
+
+        document.getElementById("noticeTitle").textContent =
+            config.noticeTitle || "📢 网站公告";
+
+        document.getElementById("noticeContent").textContent =
+            config.noticeContent || "欢迎来到青衿资源库！";
+    } catch (error) {
+        console.log("使用默认公告内容");
+    }
+}
+
 function closeNotice() {
     document.getElementById("noticePopup").style.display = "none";
 }
+
+loadNotice();
 </script>
 
 </body>
