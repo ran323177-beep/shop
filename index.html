@@ -333,7 +333,63 @@ function filterProducts(category, button) {
 // 加载商品
 loadProducts();
 </script>
+<div id="noticePopup" class="notice-mask">
+    <div class="notice-box">
+        <div class="notice-title">📢 网站公告</div>
+        <p>欢迎来到青衿资源库！本站持续整理和更新优质学习资料与实用资源。</p>
+        <button onclick="closeNotice()">我知道了</button>
+    </div>
+</div>
 
+<style>
+.notice-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.notice-box {
+    width: 85%;
+    max-width: 380px;
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.notice-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #2878e8;
+    margin-bottom: 15px;
+}
+
+.notice-box p {
+    color: #555;
+    line-height: 1.8;
+}
+
+.notice-box button {
+    margin-top: 15px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 8px;
+    background: #2878e8;
+    color: white;
+    font-size: 15px;
+}
+</style>
+
+<script>
+function closeNotice() {
+    document.getElementById("noticePopup").style.display = "none";
+}
+</script>
 
 </body>
 </html>
